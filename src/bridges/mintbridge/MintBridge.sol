@@ -10,11 +10,13 @@ import {BridgeBase} from "../base/BridgeBase.sol";
 contract MintBridge is BridgeBase {
 
     //later we can map auxdata to nft contracts during a one time set up
-    address NFTContract = 0xB228D7B6e099618Ca71bd5522B3a8c3788A8F172;
+    address NFTContract = 0x25dDb71d95d650017d9d47Ba4e6F8075291F281b;
 
     mapping (uint256 => uint256) public owners;
     
     constructor(address _rollupProcessor) BridgeBase(_rollupProcessor) {}
+
+    receive() external payable {}
 
     function convert(
         AztecTypes.AztecAsset calldata _inputAssetA,
@@ -44,17 +46,16 @@ contract MintBridge is BridgeBase {
             Redeem
             input VIRTUAL -> output doesn't matter, manually transfer the NFT
         */
-        if (_inputAssetA.assetType == AztecTypes.AztecAssetType.ETH && _outputAssetA.assetType == AztecTypes.AztecAssetType.VIRTUAL){
+        //if (_inputAssetA.assetType == AztecTypes.AztecAssetType.ETH && _outputAssetA.assetType == AztecTypes.AztecAssetType.VIRTUAL){
 
             // later we can support any NFT contract by mapping the _ausData to a set NFT contract address 
             // (_auxData is uint64 and at least uint160 is required to contain a full address)
 
             uint256 NFTId = IERC721(NFTContract).mint();
-
             owners[_interactionNonce] = NFTId;
-
+            return (1, 0, false);
             // this should automatically mint the virtual asset
-
+/*
             return (1, 0, false);
         } else if (_inputAssetA.assetType == AztecTypes.AztecAssetType.VIRTUAL){
         
@@ -65,6 +66,6 @@ contract MintBridge is BridgeBase {
             return (0, 0, false);
         } else {
             revert ErrorLib.InvalidInputA();
-        }
+        }*/
     }
 }

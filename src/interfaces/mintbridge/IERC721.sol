@@ -24,7 +24,7 @@ interface IERC721 is IERC165 {
      */
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
-    function mint() external returns (uint256 NftId);
+    function mint() external returns (uint256 newItemId);
     /**
      * @dev Returns the number of tokens in ``owner``'s account.
      */
